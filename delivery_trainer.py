@@ -48,3 +48,6 @@ x_train, x_test, y_train, y_test = train_test_split(
 lr = LinearRegression().fit(x_train, y_train)
 new_x = np.array([[3, 340]])
 print(lr.predict(new_x))
+
+# Getting accuracy
+print(lr.score(x_test, y_test))
