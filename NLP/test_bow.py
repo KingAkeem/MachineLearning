@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from requests.exceptions import HTTPError, ConnectionError
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import train_test_split
 from sys import exit
 
 warnings.filterwarnings('ignore', category=UserWarning, module='bs4')
@@ -38,23 +38,33 @@ def clean_html(html_docs):
         return words
 
 
+# Getting user inputted url
 while True:
     try:
-        url = input('Enter url: ')
-        if url == 'quit':
+        url = input('enter url (enter q to quit): ')
+        if url == 'q':
             exit(0)
         resp = requests.get(url)
         break
     except (HTTPError, ConnectionError):
         print('Try again.\n')
 
+# Cleaning html text
 text = BeautifulSoup(resp.text).get_text()
 clean_text = clean_html(text)
-train = pd.read_csv('../datasets/training_data.csv', header=0, delimiter=',')
+
+# Reading in data and splitting into training and testing set
+data = pd.read_csv('../datasets/training_data.csv', header=0, delimiter=',')
+train, test = train_test_split(data)
+
+# Creating Count vectorizer and training it
 vec = CountVectorizer(analyzer='word', stop_words='english', max_features=5000)
 word_features = vec.fit_transform(train['content'].values.astype('U'))
 forest = RandomForestClassifier(n_estimators=100)
 forest = forest.fit(word_features, train['class'])
 test_features = vec.transform((clean_text,))
 result = forest.predict(test_features)
-print(result)
+if result == 1:
+    print('This is a sports website.')
+if result == 2:
+    print('This is a news webiste.')

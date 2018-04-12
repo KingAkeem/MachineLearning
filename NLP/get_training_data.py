@@ -75,6 +75,8 @@ final_results = list()
 for i, result in enumerate(results):
     try:
         soup = BeautifulSoup(result).get_text()
+        print('Preprocessing Page {p_num} of {t_num}\n').format(p_num=i+1,
+                                                                t_num=len(results))
         final_results.append(clean_html(soup))
     except TypeError:
         continue
