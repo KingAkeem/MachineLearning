@@ -26,11 +26,10 @@ x = np.array(x)  # Sample features
 
 w = np.random.random_sample(x.shape)  # Weight vector
 eita = 0.0001  # Learning Rate
-mse = 100
 max_iter = 100
 
 y = np.zeros((len(d),))  # Predicted responses
-e = np.zeros((len(d),))
+e = np.zeros((len(d),))  # Errors
 
 error = 1
 iteration = 0
@@ -38,6 +37,8 @@ iteration = 0
 x_coor = list()
 y_coor = list()
 while error != 0 and iteration < max_iter:
+
+    # Adjusting weights based on error and learning rate
     for i in range(len(d)):
         y[i] = np.sign(np.dot(x[i], w[i]))
         e[i] = y[i] - d[i]
@@ -47,9 +48,11 @@ while error != 0 and iteration < max_iter:
     iteration += 1
     eita = 0.0001/iteration
     error = find_mse(e)
+
     x_coor.append(error)
     y_coor.append(iteration)
 
+# Plotting Learning Curve
 plt.title('Learning Rate of 0.0001 with 100 iterations')
 plt.xlabel('epochs')
 plt.ylabel('mse')
