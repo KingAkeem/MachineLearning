@@ -61,8 +61,8 @@ d = np.array(d)  # Desired responses
 x = np.array(x)  # Sample features
 
 w = np.random.random_sample(x.shape)  # Weight vector
-eita = 0.0001  # Learning Rate
-max_iter = 250
+eita = 0.1  # Learning Rate
+max_iter = 100
 
 y = np.zeros((len(d),))  # Predicted responses
 e = np.zeros((len(d),))  # Errors
@@ -82,24 +82,24 @@ while error != 0 and iteration < max_iter:
             w[i] = w[i]+np.dot(eita*(d[i]-y[i]), x[i])
 
     iteration += 1
-    eita = 0.0001/iteration
+    eita = 0.1/iteration
     error = find_mse(e)
 
     x_coor.append(error)
     y_coor.append(iteration)
 
-"""
 # Plotting Learning Curve
-plt.title('Learning Rate of .01 with 250 iterations')
+plt.title('Learning Rate of 0.1 with 100 iterations')
 plt.xlabel('epochs')
-plt.ylabel('mse')
+plt.ylabel('mean squared error')
 plt.plot(y_coor, x_coor)
 plt.show()
-"""
 
+"""
 cnf_matrix = confusion_matrix(y, d)
 np.set_printoptions(precision=2)
 plt.figure()
 
 plot_confusion_matrix(cnf_matrix, classes=np.array(['Class 1', 'Class 2']),
                       normalize=True, title='Learning Rate of .0001')
+"""
